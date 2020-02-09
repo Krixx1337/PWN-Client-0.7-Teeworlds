@@ -36,6 +36,7 @@ public:
 
 	virtual void OnConsoleInit();
 	virtual void OnStateChange(int NewState, int OldState);
+	virtual void OnReset();
 
 private:
 	enum
@@ -55,6 +56,11 @@ private:
 	int m_CurrentPosition;
 	vec2 m_AnimationStartPos;
 	float m_MoveTime;
+
+public:
+    static void ConZoomPlus(IConsole::IResult *pResult, void *pUserData);
+    static void ConZoomMinus(IConsole::IResult *pResult, void *pUserData);
+    static void ConZoomReset(IConsole::IResult *pResult, void *pUserData);
 };
 
 #endif
