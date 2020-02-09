@@ -1859,8 +1859,6 @@ set(CPACK_SOURCE_FILES
   scripts/
   src/
   storage.cfg
-  Testfile.cpp
-  Testfile.h
         )
 set(CPACK_SOURCE_IGNORE_FILES
   "\\\\.o$"
