@@ -36,6 +36,10 @@ void CControls::GrenadeAimbot() {
     if(m_InputData.m_Fire&1){                       // i wish we could just go m_Fire += 2 but the zcatch server is vpn protected and i dont wanna expose my ip as a botter ip before 0.7 even really got started
         m_InputData.m_TargetX = shoot_at.x;
         m_InputData.m_TargetY = shoot_at.y;
+        if(Config()->m_HideBotting) {               // moves mousepos so we dont look so suspicious
+            m_MousePos.x = m_InputData.m_TargetX;
+            m_MousePos.y = m_InputData.m_TargetY;
+        }
     }
 
 }
