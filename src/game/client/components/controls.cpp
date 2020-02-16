@@ -245,7 +245,7 @@ void CControls::ClampMousePos()
 }
 
 void CControls::Predict(CNetObj_Character *pCharacter, int t){
-    // We predict a certain player according to his CURRENT movement
+    // We predict a certain player according to his CURRENT input
 
     CWorldCore tempworld;
     CCharacterCore tempcore;

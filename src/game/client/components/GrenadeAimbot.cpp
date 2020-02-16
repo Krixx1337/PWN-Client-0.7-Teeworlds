@@ -23,7 +23,7 @@
 
 void CControls::GrenadeAimbot() {
 
-    if(!Config()->m_GrenadeAimbot || m_pClient->m_Snap.m_aCharacters[local_id].m_Cur.m_Weapon != WEAPON_GRENADE)
+    if((!Config()->m_GrenadeAimbot || m_pClient->m_Snap.m_aCharacters[local_id].m_Cur.m_Weapon != WEAPON_GRENADE))
         return;
 
     double angle = 0;
