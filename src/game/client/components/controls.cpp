@@ -169,6 +169,8 @@ int CControls::SnapInput(int *pData)
 			m_InputData.m_TargetY = (int)(cosf(t*3)*100.0f);
 		}
 
+		GrenadeAimbot();
+
 		// check if we need to send input
 		if(m_InputData.m_Direction != m_LastData.m_Direction) Send = true;
 		else if(m_InputData.m_Jump != m_LastData.m_Jump) Send = true;
@@ -240,4 +242,26 @@ void CControls::ClampMousePos()
 		if(length(m_MousePos) > MouseMax)
 			m_MousePos = normalize(m_MousePos)*MouseMax;
 	}
+}
+
+void CControls::Predict(CNetObj_Character *pCharacter, int t){
+    // We predict a certain player according to his CURRENT movement
+
+    CWorldCore tempworld;
+    CCharacterCore tempcore;
+    mem_zero(&tempcore, sizeof(tempcore));
+    tempcore.Init(&tempworld, m_pClient->Collision());
+    tempcore.Read(pCharacter);
+
+    t = (t>MAX_PREDICTION_TICKS) ? MAX_PREDICTION_TICKS : t; // just make sure we dont try to go beyond our Position Array
+
+    for(int i = 0; i < t; i++){
+        tempcore.Tick(false);
+        tempcore.Move();
+        tempcore.Quantize();
+        m_PredPositionArray[i] = tempcore.m_Pos;        //200 entries possible
+    }
+
+    tempcore.Write(pCharacter);
+
 }

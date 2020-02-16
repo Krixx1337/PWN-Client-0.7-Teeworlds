@@ -1445,6 +1445,7 @@ if(CLIENT)
     components/emoticon.h
     components/flow.cpp
     components/flow.h
+    components/GrenadeAimbot.cpp
     components/hud.cpp
     components/hud.h
     components/infomessages.cpp

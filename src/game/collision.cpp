@@ -212,3 +212,9 @@ void CCollision::MoveBox(vec2 *pInoutPos, vec2 *pInoutVel, vec2 Size, float Elas
 	*pInoutPos = Pos;
 	*pInoutVel = Vel;
 }
+
+int CCollision::IsSolid(int x, int y)
+{
+    int index = GetTile(x,y);
+    return index == TILE_SOLID || index == TILE_NOHOOK;
+}
