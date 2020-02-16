@@ -95,7 +95,7 @@ vec2 CControls::GetPlayer(double *RecAngle){ // now we add the Highangles to thi
         }
 
         /**************************************************************************************************************/ // HIGH ANGLES
-        if(j >= MAX_CLIENTS){
+        if(j >= MAX_CLIENTS && final_player_position == vec2(0, 0)){        //only loop when we havent found anyone to shoot at yet
             player_position = m_PredPositionArray[0];
             flight_time = 0;
             for (int x = 0; x < 20; x++){                                               // iterations we go through to get a better prediction and 20 should be more than enough
