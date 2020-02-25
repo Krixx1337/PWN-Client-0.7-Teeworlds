@@ -91,7 +91,6 @@ vec2 CControls::GetPlayer(double *RecAngle){ // now we add the Highangles to thi
         vec2 player_position = m_PredPositionArray[0];                              // we just start calculating for the current player position
         int flight_time = 0;
         double aim_at_angle = 0.0;
-        vec2 last_player_position = vec2(0, 0);
 
         /**************************************************************************************************************/ // LOW ANGLES
         if(j < MAX_CLIENTS) {
