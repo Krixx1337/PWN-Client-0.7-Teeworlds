@@ -36,10 +36,17 @@ void CControls::GrenadeAimbot() {
     if(m_InputData.m_Fire&1){                       // i wish we could just go m_Fire += 2 but the zcatch server is vpn protected and i dont wanna expose my ip as a botter ip before 0.7 even really got started
         m_InputData.m_TargetX = shoot_at.x;
         m_InputData.m_TargetY = shoot_at.y;
-        if(Config()->m_HideBotting) {               // moves mousepos so we dont look so suspicious
-            m_MousePos.x = m_InputData.m_TargetX;
-            m_MousePos.y = m_InputData.m_TargetY;
-        }
+    }
+
+    if(Config()->m_GrenadeAutofire){
+        m_InputData.m_TargetX = shoot_at.x;
+        m_InputData.m_TargetY = shoot_at.y;
+        m_InputData.m_Fire += 2;
+    }
+
+    if(Config()->m_HideBotting) {               // moves mousepos so we dont look so suspicious
+        m_MousePos.x = m_InputData.m_TargetX;
+        m_MousePos.y = m_InputData.m_TargetY;
     }
 
 }
@@ -56,7 +63,7 @@ vec2 CControls::GetPlayer(double *RecAngle){ // now we add the Highangles to thi
     double mouse_angle = GetAngle(m_MousePos);
     vec2 final_player_position = vec2(0, 0);
 
-    int iterations = MAX_CLIENTS*2;
+    int iterations = MAX_CLIENTS+MAX_CLIENTS;
     for(int j = 0; j < iterations; j++) { // we want two loops: one for lowangles and one for high angles, we want to loop through all the possible low angles, since they are easier ones to actually hit
         int i = (j >= MAX_CLIENTS) ? (j-MAX_CLIENTS) : j;
         if (i == local_id || !m_pClient->m_Snap.m_aCharacters[i].m_Active || (m_pClient->m_aClients[i].m_Team == m_pClient->m_aClients[local_id].m_Team && m_pClient->m_GameInfo.m_GameFlags&GAMEFLAG_TEAMS)){
@@ -84,10 +91,11 @@ vec2 CControls::GetPlayer(double *RecAngle){ // now we add the Highangles to thi
         vec2 player_position = m_PredPositionArray[0];                              // we just start calculating for the current player position
         int flight_time = 0;
         double aim_at_angle = 0.0;
+        vec2 last_player_position = vec2(0, 0);
 
         /**************************************************************************************************************/ // LOW ANGLES
         if(j < MAX_CLIENTS) {
-            for (int x = 0; x < 20; x++) {                                               // iterations we go through to get a better prediction and 20 should be more than enough
+            for (int x = 0; x < 50; x++) {                                               // iterations we go through to get a better prediction and 20 should be more than enough
                 //while(last_flight_time != flight_time)                                    // <-somehow this crashes on me altho it should rarely ever go beyond 10 iterations, tell me if u find out why it crashes
                 if (flight_time == -1)                                                  //code crashed when run because m_PredPositionArray doesnt have a -1st entry that flight_time can return
                     break;
@@ -97,12 +105,9 @@ vec2 CControls::GetPlayer(double *RecAngle){ // now we add the Highangles to thi
                 flight_time = GetTimeOfFlight(aim_at_angle, player_position);
             }
         }
-
         /**************************************************************************************************************/ // HIGH ANGLES
-        if(j >= MAX_CLIENTS && final_player_position == vec2(0, 0)){        //only loop when we havent found anyone to shoot at yet
-            player_position = m_PredPositionArray[0];
-            flight_time = 0;
-            for (int x = 0; x < 20; x++){                                               // iterations we go through to get a better prediction and 20 should be more than enough
+        else if(j >= MAX_CLIENTS && final_player_position == vec2(0, 0)) {        //only loop when we havent found anyone to shoot at yet
+            for (int x = 0; x < 50; x++) {                                               // iterations we go through to get a better prediction and 20 should be more than enough
                 //while(last_flight_time != flight_time)                                    // <-somehow this crashes on me altho it should rarely ever go beyond 10 iterations, tell me if u find out why it crashes
                 if (flight_time == -1)                                                  //code crashed when run because m_PredPositionArray doesnt have a -1st entry that flight_time can return
                     break;
@@ -112,6 +117,8 @@ vec2 CControls::GetPlayer(double *RecAngle){ // now we add the Highangles to thi
                 flight_time = GetTimeOfFlight(aim_at_angle, player_position);
             }
         }
+        else
+            continue;
 
         /* make sure we seek the desired player in relation to our current angle of aim */
         double angle_difference = pi - abs(abs(aim_at_angle - mouse_angle) - pi);  // formula to get the smaller angle between two
@@ -131,7 +138,7 @@ vec2 CControls::GetPlayer(double *RecAngle){ // now we add the Highangles to thi
     if(final_player_position != vec2(0 ,0))
         return final_player_position;
 
-    return {0, 0};
+    return vec2(0, 0);
 }
 
 int CControls::GetTimeOfFlight(double angle, vec2 destination){

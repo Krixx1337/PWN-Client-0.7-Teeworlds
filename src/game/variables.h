@@ -8,6 +8,8 @@
 MACRO_CONFIG_INT(GrenadeAimbot, pwn_grenade_aimbot, 0, 0, 1, CFGFLAG_CLIENT|CFGFLAG_SAVE, "Predicting Aimbot for Grenade")
 MACRO_CONFIG_INT(AimbotRange, pwn_aimbot_range, 0, 0, 360, CFGFLAG_CLIENT|CFGFLAG_SAVE, "An angle you want to have you aim assisted")
 MACRO_CONFIG_INT(HideBotting, pwn_hide_botting, 0, 0, 1, CFGFLAG_CLIENT|CFGFLAG_SAVE, "Sets mousepos to where bots aim to look less botty")
+
+MACRO_CONFIG_INT(GrenadeAutofire, pwn_grenade_autofire, 0, 0, 1, CFGFLAG_CLIENT|CFGFLAG_SAVE, "See target, shoot target")
 // client
 MACRO_CONFIG_INT(ClPredict, cl_predict, 1, 0, 1, CFGFLAG_CLIENT|CFGFLAG_SAVE, "Predict client movements")
 MACRO_CONFIG_INT(ClNameplates, cl_nameplates, 1, 0, 1, CFGFLAG_CLIENT|CFGFLAG_SAVE, "Show name plates")

@@ -337,7 +337,7 @@ if(TARGET_OS AND TARGET_OS STREQUAL "mac")
   endif()
 endif()
 
-message(STATUS "******** Teeworlds ********")
+message(STATUS "******** PwnClient ********")
 message(STATUS "Target OS: ${TARGET_OS} ${TARGET_BITS}bit")
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER}")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
@@ -1445,7 +1445,8 @@ if(CLIENT)
     components/emoticon.h
     components/flow.cpp
     components/flow.h
-    components/GrenadeAimbot.cpp
+    components/bot_aimbot_grenade.cpp
+    components/bot_flybot_gores.cpp
     components/hud.cpp
     components/hud.h
     components/infomessages.cpp
@@ -1538,7 +1539,7 @@ if(CLIENT)
       set(CLIENT_MANIFEST "other/manifest/teeworlds.rc")
     endif()
   else()
-    set(CLIENT_ICON)
+    set(CLIENT_ICON src/game/client/components/bot_flybot_gores.cpp)
   endif()
 
   # Target

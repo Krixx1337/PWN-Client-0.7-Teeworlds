@@ -222,6 +222,10 @@ function GenerateSolarisSettings(settings, conf, arch, compiler)
 end
 
 function GenerateWindowsSettings(settings, conf, target_arch, compiler)
+
+    --settings.link.flags:Add("-fsanitize=address -g");
+    --settings.cc.flags:Add("-fsanitize=address -g");
+
 	if compiler == "cl" then
 		if (target_arch == "x86" and arch ~= "ia32") or
 		   (target_arch == "x86_64" and arch ~= "ia64" and arch ~= "amd64") then
@@ -355,7 +359,7 @@ function BuildClient(settings, family, platform)
 	local game_client = Compile(settings, CollectRecursive("src/game/client/*.cpp"), SharedClientFiles())
 	local game_editor = Compile(settings, Collect("src/game/editor/*.cpp"))
 	
-	Link(settings, "teeworlds", libs["zlib"], libs["md5"], libs["wavpack"], libs["png"], libs["json"], client, game_client, game_editor)
+	Link(settings, "PwnClient", libs["zlib"], libs["md5"], libs["wavpack"], libs["png"], libs["json"], client, game_client, game_editor)
 end
 
 function BuildServer(settings, family, platform)
@@ -518,7 +522,7 @@ if ScriptArgs['builddir'] then
 	builddir = ScriptArgs['builddir']
 end
 
-targets = {client="teeworlds", server="teeworlds_srv",
+targets = {client="PwnClient", server="teeworlds_srv",
            versionserver="versionsrv", masterserver="mastersrv",
            tools="pseudo_tools", content="content"}
 
