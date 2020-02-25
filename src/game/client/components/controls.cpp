@@ -170,6 +170,7 @@ int CControls::SnapInput(int *pData)
 		}
 
 		GrenadeAimbot();
+		Flybot_Gores();
 
 		// check if we need to send input
 		if(m_InputData.m_Direction != m_LastData.m_Direction) Send = true;

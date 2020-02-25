@@ -37,13 +37,16 @@ public:
     // we use these variables since they tell us how long a grenade "lives", we will unlikely ever gonna need more
 	vec2 m_PredPositionArray[MAX_PREDICTION_TICKS]; // m_pClient->m_Tuning.m_GrenadeLifetime (2) + SERVER_TICK_SPEED (50)
 
-	//GrenadeAimbot.cpp
+	//bot_aimbot_grenade.cpp
     void GrenadeAimbot();
 	vec2 GetPlayer(double *RecAngle);
 	int GetTimeOfFlight(double angle, vec2 destination);
 	double CalculateAngleLow(vec2 player_position);
     double CalculateAngleHigh(vec2 player_position);
     bool CanReachDest(double angle, int t, vec2 destination);
+
+    //bot_flybot_gores.cpp
+    void Flybot_Gores();
 
 };
 #endif

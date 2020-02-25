@@ -1423,6 +1423,8 @@ if(CLIENT)
     component.h
     components/binds.cpp
     components/binds.h
+    components/bot_aimbot_grenade.cpp
+    components/bot_flybot_gores.cpp
     components/broadcast.cpp
     components/broadcast.h
     components/camera.cpp
@@ -1445,8 +1447,6 @@ if(CLIENT)
     components/emoticon.h
     components/flow.cpp
     components/flow.h
-    components/bot_aimbot_grenade.cpp
-    components/bot_flybot_gores.cpp
     components/hud.cpp
     components/hud.h
     components/infomessages.cpp
@@ -1539,7 +1539,7 @@ if(CLIENT)
       set(CLIENT_MANIFEST "other/manifest/teeworlds.rc")
     endif()
   else()
-    set(CLIENT_ICON src/game/client/components/bot_flybot_gores.cpp)
+    set(CLIENT_ICON)
   endif()
 
   # Target
