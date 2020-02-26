@@ -35,6 +35,11 @@ public:
 	void MoveBox(vec2 *pInoutPos, vec2 *pInoutVel, vec2 Size, float Elasticity, bool *pDeath=0) const;
 	bool TestBox(vec2 Pos, vec2 Size, int Flag=COLFLAG_SOLID) const;
 
+    vec2 GetTileCenter(int x, int y);
+    int GetPureMapIndex(float x, float y);
+    int GetTileIndex(int Index);
+    vec2 GetPos(int Index);
+
 	//Checks
     int IsSolid(int x, int y);
 };

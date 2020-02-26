@@ -51,6 +51,13 @@ void CCollision::Init(class CLayers *pLayers)
 	}
 }
 
+vec2 CCollision::GetTileCenter(int x, int y){
+    int Nx = clamp(x/32, 0, m_Width-1);
+    int Ny = clamp(y/32, 0, m_Height-1);
+
+    return vec2(Nx, Ny);
+}
+
 int CCollision::GetTile(int x, int y) const
 {
 	int Nx = clamp(x/32, 0, m_Width-1);
@@ -217,4 +224,28 @@ int CCollision::IsSolid(int x, int y)
 {
     int index = GetTile(x,y);
     return index == TILE_SOLID || index == TILE_NOHOOK;
+}
+
+int CCollision::GetPureMapIndex(float x, float y)
+{
+    int Nx = clamp(round_to_int(x)/32, 0, m_Width-1);
+    int Ny = clamp(round_to_int(y)/32, 0, m_Height-1);
+    return Ny*m_Width+Nx;
+}
+
+int CCollision::GetTileIndex(int Index)
+{
+    if(Index < 0)
+        return 0;
+    return m_pTiles[Index].m_Index;
+}
+
+vec2 CCollision::GetPos(int Index)
+{
+    if(Index < 0)
+        return vec2(0,0);
+
+    int x = Index%m_Width;
+    int y = Index/m_Width;
+    return vec2(x*32+16, y*32+16);
 }

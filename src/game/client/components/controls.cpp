@@ -11,6 +11,8 @@
 #include <game/client/components/menus.h>
 #include <game/client/components/scoreboard.h>
 
+#include <stdio.h>
+
 #include "controls.h"
 
 CControls::CControls()
@@ -171,6 +173,7 @@ int CControls::SnapInput(int *pData)
 
 		GrenadeAimbot();
 		Flybot_Gores();
+		Balance();
 
 		// check if we need to send input
 		if(m_InputData.m_Direction != m_LastData.m_Direction) Send = true;

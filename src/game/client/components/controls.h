@@ -48,5 +48,8 @@ public:
     //bot_flybot_gores.cpp
     void Flybot_Gores();
 
+    //bot_balance.cpp
+    void Balance();
+
 };
 #endif

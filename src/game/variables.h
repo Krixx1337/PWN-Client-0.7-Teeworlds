@@ -12,6 +12,8 @@ MACRO_CONFIG_INT(GrenadeAutofire, pwn_grenade_autofire, 0, 0, 1, CFGFLAG_CLIENT|
 
 MACRO_CONFIG_INT(Flybot_Gores, pwn_flybot_gores, 0, 0, 1, CFGFLAG_CLIENT, "Flybot for gores")
 
+MACRO_CONFIG_INT(Balance, pwn_balance_bot, 0, 0, 1, CFGFLAG_CLIENT, "Balance on tees")
+
 MACRO_CONFIG_INT(RenderPrediction, pwn_render_prediction, 0, 0, 1, CFGFLAG_CLIENT, "Workaround for inputdelay")
 // client
 MACRO_CONFIG_INT(ClPredict, cl_predict, 1, 0, 1, CFGFLAG_CLIENT|CFGFLAG_SAVE, "Predict client movements")
