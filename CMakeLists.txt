@@ -1427,6 +1427,7 @@ if(CLIENT)
     components/bot_balance.cpp
     components/bot_flybot_gores.cpp
     components/bot_grenade_dodge.cpp
+    components/bot_pathfinder_astar.cpp
     components/broadcast.cpp
     components/broadcast.h
     components/camera.cpp

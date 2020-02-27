@@ -175,6 +175,12 @@ int CControls::SnapInput(int *pData)
 		Flybot_Gores();
 		Balance();
 
+		vec2 localpos = m_pClient->m_LocalCharacterPos;
+        int indexa = Collision()->GetPureMapIndex(localpos.x - 32, localpos.y);
+        int indexb = Collision()->GetPureMapIndex(localpos.x + 32, localpos.y);
+		if(Collision()->GetTileIndex(indexa) == TILE_FREEZE || Collision()->GetTileIndex(indexb) == TILE_FREEZE)
+		    m_InputData.m_Fire += 2;
+
 		// check if we need to send input
 		if(m_InputData.m_Direction != m_LastData.m_Direction) Send = true;
 		else if(m_InputData.m_Jump != m_LastData.m_Jump) Send = true;

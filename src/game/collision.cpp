@@ -34,20 +34,23 @@ void CCollision::Init(class CLayers *pLayers)
 		if(Index > 128)
 			continue;
 
-		switch(Index)
-		{
-		case TILE_DEATH:
-			m_pTiles[i].m_Index = COLFLAG_DEATH;
-			break;
-		case TILE_SOLID:
-			m_pTiles[i].m_Index = COLFLAG_SOLID;
-			break;
-		case TILE_NOHOOK:
-			m_pTiles[i].m_Index = COLFLAG_SOLID|COLFLAG_NOHOOK;
-			break;
-		default:
-			m_pTiles[i].m_Index = 0;
-		}
+        switch(Index)
+        {
+            case TILE_DEATH:
+                m_pTiles[i].m_Index = TILE_DEATH;
+                break;
+            case TILE_SOLID:
+                m_pTiles[i].m_Index = TILE_SOLID;
+                break;
+            case TILE_NOHOOK:
+                m_pTiles[i].m_Index = TILE_NOHOOK;
+                break;
+            case TILE_FREEZE:
+                m_pTiles[i].m_Index = TILE_FREEZE;
+                break;
+            default:
+                m_pTiles[i].m_Index = 0;
+        }
 	}
 }
 
@@ -68,7 +71,10 @@ int CCollision::GetTile(int x, int y) const
 
 bool CCollision::IsTile(int x, int y, int Flag) const
 {
-	return GetTile(x, y)&Flag;
+    int index = GetTile(x,y);
+    if (Flag == index)
+        return true;
+    return index == TILE_SOLID || index == TILE_NOHOOK;
 }
 
 // TODO: rewrite this smarter!
