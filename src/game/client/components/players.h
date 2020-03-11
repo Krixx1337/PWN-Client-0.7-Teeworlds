@@ -24,6 +24,8 @@ class CPlayers : public CComponent
 
 public:
 	virtual void OnRender();
+    void drawline(vec2 p0, vec2 p1, float r, float g, float b);
+    void drawbox(vec2 p0, float r, float g, float b);
 };
 
 #endif

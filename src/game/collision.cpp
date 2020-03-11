@@ -72,8 +72,8 @@ int CCollision::GetTile(int x, int y) const
 bool CCollision::IsTile(int x, int y, int Flag) const
 {
     int index = GetTile(x,y);
-    if (Flag == index)
-        return true;
+    if (Flag == TILE_DEATH)
+        return index == TILE_DEATH;
     return index == TILE_SOLID || index == TILE_NOHOOK;
 }
 

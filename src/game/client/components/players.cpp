@@ -272,6 +272,11 @@ void CPlayers::RenderPlayer(
 
 	// draw gun
 	{
+
+        ///use this space to draw stuff i guess
+        m_pClient->m_pControls->draw_path(m_pClient->m_pControls->end_path);
+        ///
+
 		Graphics()->TextureSet(g_pData->m_aImages[IMAGE_GAME].m_Id);
 		Graphics()->QuadsBegin();
 		Graphics()->QuadsSetRotation(State.GetAttach()->m_Angle*pi*2+Angle);
@@ -422,7 +427,6 @@ void CPlayers::RenderPlayer(
 			case WEAPON_SHOTGUN: RenderTools()->RenderTeeHand(&RenderInfo, p, Direction, -pi/2, vec2(-5, 4)); break;
 			case WEAPON_GRENADE: RenderTools()->RenderTeeHand(&RenderInfo, p, Direction, -pi/2, vec2(-4, 7)); break;
 		}
-
 	}
 
 	// render the "shadow" tee
@@ -560,3 +564,29 @@ void CPlayers::OnRender()
 		}
 	}
 }
+
+
+void CPlayers::drawline(vec2 p0, vec2 p1, float r, float g, float b)
+{
+    Graphics()->TextureClear();
+    Graphics()->LinesBegin();
+    Graphics()->SetColor(r, g, b, 1.0f);
+    IGraphics::CLineItem LineItem(p0.x, p0.y, p1.x, p1.y);
+    Graphics()->LinesDraw(&LineItem, 1);
+    Graphics()->LinesEnd();
+}
+
+void CPlayers::drawbox(vec2 p0, float r, float g, float b){
+
+    vec2 x, y, a, e;
+    x = vec2(p0.x - 16, p0.y - 16);
+    y = vec2(p0.x + 16, p0.y - 16);
+    a = vec2(p0.x + 16, p0.y + 16);
+    e = vec2(p0.x - 16, p0.y + 16);
+
+    drawline(x, y, r, g, b);
+    drawline(y, a, r, g, b);
+    drawline(a, e, r, g, b);
+    drawline(e, x, r, g, b);
+}
+

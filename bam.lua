@@ -87,6 +87,9 @@ function GenerateCommonSettings(settings, conf, arch, compiler)
 		settings.cc.flags:Add("-Wall", "-fno-exceptions")
 	end
 
+	settings.link.flags:Add("-fsanitize=undefined -g");
+    settings.cc.flags:Add("-fsanitize=undefined -g");
+
 	-- Compile zlib if needed
 	local zlib = nil
 	if config.zlib.value == 1 then
@@ -223,10 +226,7 @@ end
 
 function GenerateWindowsSettings(settings, conf, target_arch, compiler)
 
-    --settings.link.flags:Add("-fsanitize=address -g");
-    --settings.cc.flags:Add("-fsanitize=address -g");
-
-	if compiler == "cl" then
+ 	if compiler == "cl" then
 		if (target_arch == "x86" and arch ~= "ia32") or
 		   (target_arch == "x86_64" and arch ~= "ia64" and arch ~= "amd64") then
 			print("Cross compiling is unsupported on Windows.")

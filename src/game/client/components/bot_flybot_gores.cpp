@@ -14,9 +14,9 @@
 #include <engine/input.h>
 
 //variables
+#define local_id m_pClient->m_LocalClientID
 #define local_position m_pClient->m_aClients[m_pClient->m_LocalClientID].m_Predicted.m_Pos
 #define local_velocity m_pClient->m_aClients[m_pClient->m_LocalClientID].m_Predicted.m_Vel
-#define local_id m_pClient->m_LocalClientID
 
 void CControls::Flybot_Gores(){
 

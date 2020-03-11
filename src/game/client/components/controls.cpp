@@ -174,12 +174,7 @@ int CControls::SnapInput(int *pData)
 		GrenadeAimbot();
 		Flybot_Gores();
 		Balance();
-
-		vec2 localpos = m_pClient->m_LocalCharacterPos;
-        int indexa = Collision()->GetPureMapIndex(localpos.x - 32, localpos.y);
-        int indexb = Collision()->GetPureMapIndex(localpos.x + 32, localpos.y);
-		if(Collision()->GetTileIndex(indexa) == TILE_FREEZE || Collision()->GetTileIndex(indexb) == TILE_FREEZE)
-		    m_InputData.m_Fire += 2;
+		astar_pathfinder();
 
 		// check if we need to send input
 		if(m_InputData.m_Direction != m_LastData.m_Direction) Send = true;
@@ -275,3 +270,28 @@ void CControls::Predict(CNetObj_Character *pCharacter, int t){
     tempcore.Write(pCharacter);
 
 }
+
+void CControls::drawline(vec2 p0, vec2 p1, float r, float g, float b)
+{
+    Graphics()->TextureClear();
+    Graphics()->LinesBegin();
+    Graphics()->SetColor(r, g, b, 1.0f);
+    IGraphics::CLineItem LineItem(p0.x, p0.y, p1.x, p1.y);
+    Graphics()->LinesDraw(&LineItem, 1);
+    Graphics()->LinesEnd();
+}
+
+void CControls::drawbox(vec2 p0, float r, float g, float b){
+
+    vec2 x, y, a, e;
+    x = vec2(p0.x - 16, p0.y - 16);
+    y = vec2(p0.x + 16, p0.y - 16);
+    a = vec2(p0.x + 16, p0.y + 16);
+    e = vec2(p0.x - 16, p0.y + 16);
+
+    drawline(x, y, r, g, b);
+    drawline(y, a, r, g, b);
+    drawline(a, e, r, g, b);
+    drawline(e, x, r, g, b);
+}
+

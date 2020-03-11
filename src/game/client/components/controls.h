@@ -6,11 +6,11 @@
 #include <game/client/component.h>
 #include <generated/protocol.h>
 #include <game/collision.h>
+#include <vector>
+#include <array>
+#include <queue>
 
 #define MAX_PREDICTION_TICKS 100
-//#define T_WIDTH Collision()->GetWidth()
-//#define T_HEIGHT Collision()->GetHeight()
-#define MAX_PATH_VALUE 2048
 
 class CControls : public CComponent
 {
@@ -56,13 +56,49 @@ public:
     void Balance();
 
     ///bot_pathfinder_astar.cpp
-    void Pathfinder(vec2 pos1, vec2 pos2);
-    vec2 final_path[MAX_PATH_VALUE];
+    //std::vector<struct path_tile> best_path;
+    vec2 d_start;
+    vec2 d_end;
+    int count;
+    std::vector<struct path_tile> end_path;
+    void astar_pathfinder();
+    void find_path(vec2 start, vec2 end);
+    float heuristic(int x, int y, vec2 end);
+    static bool is_destination(int x, int y, vec2 destination);
+    bool is_valid(float x, float y, vec2 start);
+    void draw_path(std::vector<struct path_tile> path);
 
-    //a few functions so we know what we need to keep track of
-    bool IsValid(); //need to know if start and dest are within our grid and no solid or freeze themselves (!= TILE_AIR - basically ( we dont have TILE_FREEZE on vanilla ))
+    //drawing
 
+    void drawline(vec2 p0, vec2 p1, float r, float g, float b);
+    void drawbox(vec2 p0, float r, float g, float b);
+};
 
+struct path_tile{
+
+    float x;            //actual position
+    float y;
+
+    int ax;           //position within the array - to keep trackj
+    int ay;
+
+    float g_cost;        //distance from the start
+    float h_cost;        //distnace to the end
+    float f_cost;        //h_cost + g_cost
+
+    int x_parent;
+    int y_parent;       //this is what we use for arrays
+
+    int x_parent_pos;   //this is the actual x and y pos
+    int y_parent_pos;
+
+    int came_from;
+
+    bool operator<(const path_tile& rhs) const   // i really dont know what this is for but since everything else i tried just crashed on me w/e
+    {//We need to overload "<" to put our struct into a set
+        return f_cost > rhs.f_cost;
+    }
 
 };
+
 #endif
