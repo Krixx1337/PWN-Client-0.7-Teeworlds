@@ -59,46 +59,20 @@ public:
     //std::vector<struct path_tile> best_path;
     vec2 d_start;
     vec2 d_end;
-    int count;
-    std::vector<struct path_tile> end_path;
+
+    int mapwidth;
+    int mapheight;
+
     void astar_pathfinder();
-    void find_path(vec2 start, vec2 end);
-    float heuristic(int x, int y, vec2 end);
-    static bool is_destination(int x, int y, vec2 destination);
-    bool is_valid(float x, float y, vec2 start);
-    void draw_path(std::vector<struct path_tile> path);
+    void find_path(vec2 pstart, vec2 pend);
+    float heuristic(float x, float y, vec2 end);
+    static bool is_destination(float x, float y, vec2 destination);
+    bool is_valid(float x, float y);
 
     //drawing
 
     void drawline(vec2 p0, vec2 p1, float r, float g, float b);
     void drawbox(vec2 p0, float r, float g, float b);
-};
-
-struct path_tile{
-
-    float x;            //actual position
-    float y;
-
-    int ax;           //position within the array - to keep trackj
-    int ay;
-
-    float g_cost;        //distance from the start
-    float h_cost;        //distnace to the end
-    float f_cost;        //h_cost + g_cost
-
-    int x_parent;
-    int y_parent;       //this is what we use for arrays
-
-    int x_parent_pos;   //this is the actual x and y pos
-    int y_parent_pos;
-
-    int came_from;
-
-    bool operator<(const path_tile& rhs) const   // i really dont know what this is for but since everything else i tried just crashed on me w/e
-    {//We need to overload "<" to put our struct into a set
-        return f_cost > rhs.f_cost;
-    }
-
 };
 
 #endif

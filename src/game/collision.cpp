@@ -12,6 +12,8 @@
 #include <game/layers.h>
 #include <game/collision.h>
 
+#include <engine/shared/config.h>
+
 CCollision::CCollision()
 {
 	m_pTiles = 0;

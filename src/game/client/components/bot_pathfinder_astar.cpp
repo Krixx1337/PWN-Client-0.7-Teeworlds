@@ -14,17 +14,26 @@
 #include <vector>
 #include <stack>
 
-#define x_max Config()->m_X_MAX
-#define y_max Config()->m_Y_MAX
-
 using namespace std;
+#define STEP 32         //tilewidth
+#define MAX_X mapwidth
+#define MAX_Y mapheight
 
-/*
- *
- *
- *
- *
- * */
+struct node{
+    int x;
+    int y;
+    int parent_x;
+    int parent_y;
+    float gcost;
+    float hcost;
+    float fcost;
+};
+
+typedef struct node node;
+
+inline bool operator < (const node& lhs, const node& rhs){
+    return lhs.fcost < rhs.fcost;
+}
 
 void CControls::astar_pathfinder() {
 
@@ -32,33 +41,35 @@ void CControls::astar_pathfinder() {
     if(!Config()->m_Pathfinder)
         return;
 
-    vec2 start = m_pClient->m_aClients[m_pClient->m_LocalClientID].m_Predicted.m_Pos;
+    mapwidth = Collision()->GetWidth();
+    mapheight = Collision()->GetHeight();
+
+    printf("START PATHFINDER with maxx = %d and maxy = %d\n", MAX_X, MAX_Y);
+    vec2 start = m_pClient->m_LocalCharacterPos;
     vec2 end = start + m_MousePos;
 
     find_path(start, end);
+    printf("END PATHFINDER \n");
 
 }
 
-bool CControls::is_destination(int x, int y, vec2 destination) {
-    if(abs(destination.x - x) < 32 && abs(destination.y - y) < 32)
+bool CControls::is_destination(float x, float y, vec2 destination) {
+    if(x == destination.x, y == destination.y)
         return true;
     return false;
 }
 
-bool CControls::is_valid(float x, float y, vec2 start){
-    int index = Collision()->GetCollisionAt(x, y);
-    if(index == TILE_AIR){
-        if(x < start.x - x_max
-        || x >= start.x + x_max
-        || y < start.y - y_max
-        || y >= start.y + y_max)
+bool CControls::is_valid(float x, float y){
+    int tile = Collision()->GetCollisionAt(x, y);
+    if(tile == TILE_AIR){
+        if(x < 0 || x >= MAX_X || y < 0 || y >= MAX_Y)
             return false;
         return true;
     }
     return false;
 }
 
-float CControls::heuristic(int x, int y, vec2 end) {
+float CControls::heuristic(float x, float y, vec2 end) {
     //using manhatten distance here, since teeworlds is made of blocks
     float d = abs(end.x - x) + abs(end.y - y);
     return d;
@@ -68,120 +79,144 @@ void CControls::find_path(vec2 start, vec2 end){
 
     /// set start and end pos to each tile center so we do not run into funny things
 
-    int xdif = (int)start.x/32;
-    int ydif = (int)start.y/32;
-    start = vec2(xdif*32 + 16, ydif*32 + 16);
-    xdif = (int)end.x/32;
-    ydif = (int)end.y/32;
-    end = vec2(xdif*32 + 16, ydif*32 + 16);
+    int xdif = start.x/32;
+    int ydif = start.y/32;
+    start = vec2(xdif, ydif);
+    //vec2 end = m_pClient->m_LocalCharacterPos;
+    xdif = end.x/32;
+    ydif = end.y/32;
+    end = vec2(xdif, ydif);
 
     d_start = start;
     d_end = end;
 
     ///
 
-    while(!end_path.empty()){
-        end_path.pop_back();
+    printf("CHECKPOINT 0.0\n");
+
+    vector<node> empty;
+    if(!is_valid(end.x, end.y)){
+        return;
     }
 
-    //initialise our map
+    printf("CHECKPOINT 0.25\n");
 
-    float MAX_DIST = x_max + y_max;
-    path_tile map[x_max][y_max];
-    bool closed_list[x_max][y_max];
+    if(is_destination(start.x, start.y, end)){
+        return;
+    }
 
-    int i = 0;
-    for(int x = 0; x < x_max; x++){
-        for(int y = 0; y < y_max; y++){
-            map[x][y].f_cost = MAX_DIST;        //g + h
-            map[x][y].h_cost = MAX_DIST;        //heuristic - cost to end
-            map[x][y].g_cost = MAX_DIST;        //cost from start
-            map[x][y].y_parent = -1;
-            map[x][y].x_parent = -1;
-            map[x][y].x_parent_pos = start.x - 32*x_max/2  +  32*x;
-            map[x][y].y_parent_pos = start.y - 32*y_max/2  +  32*y;
-            map[x][y].ax = x;
-            map[x][y].ay = y;
+    printf("CHECKPOINT 0.5\n");
 
-            map[x][y].came_from = -1;
+    bool closedlist[MAX_X][MAX_Y];
 
-            map[x][y].x = start.x - 32*x_max/2  +  32*x;
-            map[x][y].y = start.y - 32*y_max/2  +  32*y;
+    //initialize the map
+    printf("CHECKPOINT 0.525\n");
+    printf("INITIALIZE ARRAY with maxx = %d and maxy = %d\n", MAX_X, MAX_Y);
 
-            closed_list[x][y] = false;
+    /*node** allmap = new node*[MAX_Y];
+    for(int i = 0; i < MAX_Y; i++){
+        allmap[i] = new node[MAX_X];
+    }*/
+
+    printf("CHECKPOINT 0.55\n");
+
+    int count = 0;
+    for(int x = 0; x < MAX_X; x++){
+        for(int y = 0; y < MAX_Y; y++){
+            allmap[x][y].fcost = 100000; //very high numbers yees
+            allmap[x][y].gcost = 100000;
+            allmap[x][y].hcost = 100000;
+            allmap[x][y].parent_x = -1;
+            allmap[x][y].parent_y = -1;
+            allmap[x][y].x = x;
+            allmap[x][y].y = y;
+            count++;
+
+            closedlist[x][y] = false;
         }
     }
+    printf("TOTAL LOOPS %d\n", count);
 
-    // our [0][0] is techincally x_max/2 and y_max/2 so we start at vec2 start
+    printf("CHECKPOINT 0.6\n");
+    //initialize starting point
 
-    int x = x_max/2;
-    int y = y_max/2;
+    int x = start.x;
+    int y = start.y;
+    allmap[x][y].fcost = 0.0f;
+    allmap[x][y].gcost = 0.0f;
+    allmap[x][y].hcost = 0.0f;
+    allmap[x][y].parent_x = x;
+    allmap[x][y].parent_y = y;
 
-    map[x][y].g_cost = 0;
-    map[x][y].f_cost = 0;
-    map[x][y].h_cost = 0;
-    map[x][y].x_parent = -x_max/2  +  x;
-    map[x][y].y_parent = -y_max/2  +  y;
+    printf("CHECKPOINT 0.75\n");
 
-    priority_queue<path_tile> open_set;
-    open_set.push(map[x][y]);
-    path_tile came_from[i];
+    vector<node> openlist;
+    openlist.emplace_back(allmap[x][y]);
+    bool destinationfound = false;
 
-    while(!open_set.empty()){
-
-        path_tile current = open_set.top();
-
-        if (is_destination(map[current.ax][current.ay].x, map[current.ax][current.ay].y, end)) {
-
-            while(i>0) {
-                current = came_from[i];
-                end_path.push_back(current);
-                printf("FOUND DESTINATION!\n");
-                i--;
+    while(!openlist.empty()){
+        node tile;
+        do{
+            float temp = 10000000;
+            vector<node>::iterator itNode;
+            for(vector<node>::iterator it = openlist.begin(); it != openlist.end(); it = next(it)){
+                node n = *it;
+                if(n.fcost < temp){
+                    temp = n.fcost;
+                    itNode = it;
+                }
             }
+            tile = *itNode;
+            openlist.erase(itNode);
+        }while(is_valid(tile.x, tile.y) == false);
 
-            /// we wanna draw the path to be sure it works as intended, so we wanna have something we are able to pass to players.cpp to draw xd
+        printf("CHECKPOINT 1\n");
 
+        x = tile.x/STEP;
+        y = tile.y/STEP;
+        closedlist[x][y] = true;
+        printf("CHECKPOINT 2\n");
 
+        //for each neighbour starting from northwest to southeast
+        for(int newx = -1; newx <= 1; newx++){
+            for(int newy = -1; newy <= 1; newy++){
+                float gnew, hnew, fnew;
+                printf("CHECKPOINT 3\n");
+                if(is_destination(tile.x + newx, tile.y + newy, end)){
+                    allmap[x + newx][y + newy].parent_x = x;
+                    allmap[x + newx][y + newy].parent_y = y;
+                    destinationfound = true;
+                    printf("CHECKPOINT DESTINATION FOUND\n");
 
-            ///
-            return;
-        }
-
-        open_set.pop();
-
-        closed_list[current.ax][current.ay] = true;
-
-        for(int nx = -1; nx <= 1; nx++){
-            for(int ny = -1; ny <= 1; ny++){
-                if(is_valid(current.x + nx*32, current.y + ny*32, start)) {
-                    float d = (nx == ny) ? 32 * 1.141f : 32.0f;
-                    float tentative_g_cost = current.g_cost + d;
-
-                    if (tentative_g_cost < map[current.ax + nx][current.ay + ny].g_cost) {
-                        came_from[i] = current;
-                        i++;
-                        map[current.ax + nx][current.ay + ny].g_cost = tentative_g_cost;
-                        map[current.ax + nx][current.ay + ny].f_cost = map[current.ax + nx][current.ay + ny].g_cost + heuristic(current.x, current.y, end);
-                        if (closed_list[current.ax + nx][current.ay + ny] == false) {
-                            //map[current.ax + nx][current.ay + ny].x_parent = current.ax;
-                            //map[current.ax + nx][current.ay + ny].y_parent = current.ay;
-                            open_set.push(map[current.ax + nx][current.ay + ny]);
-                        }
+                    ///MAKE PATH HERE
+                }
+                else if(closedlist[x + newx/STEP][y + newy/STEP] == false){
+                    printf("CHECKPOINT 4\n");
+                    gnew = (newx == newy) ? tile.gcost + 1.141f : tile.gcost + 1.0f;
+                    hnew = heuristic(tile.x + newx, tile.y, end);
+                    fnew = gnew + hnew;
+                    //Check if new path is better than old one
+                    if(allmap[x + newx][y + newy].gcost > gnew){
+                        allmap[x + newx][y + newy].fcost = fnew;
+                        allmap[x + newx][y + newy].gcost = gnew;
+                        allmap[x + newx][y + newy].hcost = hnew;
+                        allmap[x + newx][y + newy].parent_x = x;
+                        allmap[x + newx][y + newy].parent_y = y;
+                        openlist.emplace_back(allmap[x + newx][y + newy]);
                     }
                 }
             }
         }
-    }
-}
-
-void CControls::draw_path(vector<path_tile> path) {
-
-    for(vector<path_tile>::iterator it = path.begin(); it != path.end(); ++it){
-        drawbox(vec2(it->x, it->y), 1, 0, 0);
+        if(destinationfound == false){
+            return;
+        }
     }
 
+
+
+
 }
+
 
 
 

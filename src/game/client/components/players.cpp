@@ -274,7 +274,7 @@ void CPlayers::RenderPlayer(
 	{
 
         ///use this space to draw stuff i guess
-        m_pClient->m_pControls->draw_path(m_pClient->m_pControls->end_path);
+        //m_pClient->m_pControls->draw_path(m_pClient->m_pControls->end_path);
         ///
 
 		Graphics()->TextureSet(g_pData->m_aImages[IMAGE_GAME].m_Id);
