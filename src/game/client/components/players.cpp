@@ -18,6 +18,8 @@
 #include <game/client/components/sounds.h>
 #include <game/client/components/controls.h>
 
+#include <vector>
+
 #include "players.h"
 
 inline float NormalizeAngular(float f)
@@ -274,7 +276,7 @@ void CPlayers::RenderPlayer(
 	{
 
         ///use this space to draw stuff i guess
-        //m_pClient->m_pControls->draw_path(m_pClient->m_pControls->end_path);
+        m_pClient->m_pControls->drawpath(m_pClient->m_pControls->used_path);
         ///
 
 		Graphics()->TextureSet(g_pData->m_aImages[IMAGE_GAME].m_Id);

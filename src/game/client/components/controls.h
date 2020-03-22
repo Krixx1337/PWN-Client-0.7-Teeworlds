@@ -7,8 +7,6 @@
 #include <generated/protocol.h>
 #include <game/collision.h>
 #include <vector>
-#include <array>
-#include <queue>
 
 #define MAX_PREDICTION_TICKS 100
 
@@ -60,6 +58,8 @@ public:
     vec2 d_start;
     vec2 d_end;
 
+    std::vector<vec2> used_path;
+
     int mapwidth;
     int mapheight;
 
@@ -67,12 +67,27 @@ public:
     void find_path(vec2 pstart, vec2 pend);
     float heuristic(float x, float y, vec2 end);
     static bool is_destination(float x, float y, vec2 destination);
-    bool is_valid(float x, float y);
+    bool is_valid(float x, float y, vec2 start);
+    void drawpath(std::vector<vec2> path);
 
     //drawing
 
     void drawline(vec2 p0, vec2 p1, float r, float g, float b);
     void drawbox(vec2 p0, float r, float g, float b);
 };
+
+struct node{
+    int x;
+    int y;
+    int parent_x;
+    int parent_y;
+    float gcost;
+    float hcost;
+    float fcost;
+};
+
+inline bool operator < (const node& lhs, const node& rhs){
+    return lhs.fcost < rhs.fcost;
+}
 
 #endif
