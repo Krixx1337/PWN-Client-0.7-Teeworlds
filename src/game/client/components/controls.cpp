@@ -293,5 +293,8 @@ void CControls::drawbox(vec2 p0, float r, float g, float b){
     drawline(y, a, r, g, b);
     drawline(a, e, r, g, b);
     drawline(e, x, r, g, b);
+
+	drawline(x, a, r, g, b);
+	drawline(y, e, r, g, b);
 }
 

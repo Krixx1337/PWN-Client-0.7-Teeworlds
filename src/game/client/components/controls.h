@@ -77,17 +77,19 @@ public:
 };
 
 struct node{
-    int x;
-    int y;
-    int parent_x;
-    int parent_y;
+    float x;
+    float y;
+    int x_array;
+    int y_array;
     float gcost;
     float hcost;
     float fcost;
+
+    vec2 neighbours[4] = {};
 };
 
-inline bool operator < (const node& lhs, const node& rhs){
-    return lhs.fcost < rhs.fcost;
+inline bool operator > (const node& lhs, const node& rhs){
+    return lhs.fcost > rhs.fcost;
 }
 
 #endif

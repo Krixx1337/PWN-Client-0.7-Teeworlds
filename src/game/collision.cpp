@@ -38,6 +38,9 @@ void CCollision::Init(class CLayers *pLayers)
 
         switch(Index)
         {
+			case TILE_AIR:
+				m_pTiles[i].m_Index = TILE_AIR;
+				break;
             case TILE_DEATH:
                 m_pTiles[i].m_Index = TILE_DEATH;
                 break;
@@ -74,6 +77,8 @@ int CCollision::GetTile(int x, int y) const
 bool CCollision::IsTile(int x, int y, int Flag) const
 {
     int index = GetTile(x,y);
+	if(Flag == TILE_AIR)
+		return index == TILE_AIR;
     if (Flag == TILE_DEATH)
         return index == TILE_DEATH;
     return index == TILE_SOLID || index == TILE_NOHOOK;
@@ -232,6 +237,12 @@ int CCollision::IsSolid(int x, int y)
 {
     int index = GetTile(x,y);
     return index == TILE_SOLID || index == TILE_NOHOOK;
+}
+
+int CCollision::IsAir(int x, int y)
+{
+	int index = GetTile(x, y);
+	return index == TILE_AIR;
 }
 
 int CCollision::GetPureMapIndex(float x, float y)

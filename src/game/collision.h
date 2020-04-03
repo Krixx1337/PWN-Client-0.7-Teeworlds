@@ -43,6 +43,7 @@ public:
 
 	//Checks
     int IsSolid(int x, int y);
+	int IsAir(int x, int y);
 };
 
 #endif
