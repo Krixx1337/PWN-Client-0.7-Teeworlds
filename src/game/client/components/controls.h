@@ -69,6 +69,7 @@ public:
     static bool is_destination(float x, float y, vec2 destination);
     bool is_valid(float x, float y, vec2 start);
     void drawpath(std::vector<vec2> path);
+    
 
     //drawing
 

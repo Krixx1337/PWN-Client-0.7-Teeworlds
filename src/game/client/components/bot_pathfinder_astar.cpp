@@ -117,10 +117,10 @@ void CControls::find_path(vec2 start, vec2 end){
             map[x][y].x_array = x;
             map[x][y].y_array = y;
 
-            map[x][y].neighbours[0] = vec2(map[x][y].x_array-1, map[x][y].y_array);
-            map[x][y].neighbours[1] = vec2(map[x][y].x_array+1, map[x][y].y_array);
-            map[x][y].neighbours[2] = vec2(map[x][y].x_array, map[x][y].y_array-1);
-            map[x][y].neighbours[3] = vec2(map[x][y].x_array, map[x][y].y_array+1);
+            map[x][y].neighbours[0] = vec2(x - 1, y);
+            map[x][y].neighbours[1] = vec2(x + 1, y);
+            map[x][y].neighbours[2] = vec2(x, y - 1);
+            map[x][y].neighbours[3] = vec2(x, y + 1);
 
             camefrom[x][y].x = -1;
             camefrom[x][y].y = -1;
@@ -150,8 +150,6 @@ void CControls::find_path(vec2 start, vec2 end){
         closedlist[x][y] = true;
 
         if(is_destination(tile.x, tile.y, end)){
-            printf("Destination Found\n");
-            ///we do stuff here later
 
             int lx = x, ly = y;
             while(camefrom[x][y].x != -1 && camefrom[x][y].y != -1){
@@ -164,12 +162,12 @@ void CControls::find_path(vec2 start, vec2 end){
                     we are just going to find the node between them which is valid and hope there is one
                 */
 
-                if(x != lx && y != ly){
-                    if(is_valid(map[lx][y].x, map[lx][y].y, start))
+                /*if(x != lx && y != ly){
+                    if(is_valid(map[lx][y].x, map[lx][y].y, start) && lx > 0 && lx < MAX_X)
                         used_path.emplace_back(vec2(map[lx][y].x, map[lx][y].y));
-                    else if(is_valid(map[x][ly].x, map[x][ly].y, start))
+                    else if(is_valid(map[x][ly].x, map[x][ly].y, start) && ly > 0 && ly < MAX_Y)
                         used_path.emplace_back(vec2(map[x][ly].x, map[x][ly].y));
-                }
+                }*/
 
                 lx = x; ly = y;
             }
@@ -194,7 +192,7 @@ void CControls::find_path(vec2 start, vec2 end){
             gnew = tile.gcost + 1.0f;
             hnew = heuristic(map[dx][dy].x, map[dx][dy].y, end);
             fnew = gnew + hnew;
-            if(map[dx][dy].fcost > fnew){
+            if(map[dx][dy].gcost > gnew){
                 map[dx][dy].gcost = gnew;
                 map[dx][dy].hcost = hnew;
                 map[dx][dy].fcost = fnew;
