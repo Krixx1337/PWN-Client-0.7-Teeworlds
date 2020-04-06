@@ -1424,6 +1424,7 @@ if(CLIENT)
     components/binds.cpp
     components/binds.h
     components/bot_aimbot_grenade.cpp
+    components/bot_automove.cpp
     components/bot_balance.cpp
     components/bot_flybot_gores.cpp
     components/bot_grenade_dodge.cpp

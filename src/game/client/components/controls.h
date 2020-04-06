@@ -54,25 +54,19 @@ public:
     void Balance();
 
     ///bot_pathfinder_astar.cpp
-    //std::vector<struct path_tile> best_path;
-    vec2 d_start;
-    vec2 d_end;
-
     std::vector<vec2> used_path;
-
-    int mapwidth;
-    int mapheight;
-
     void astar_pathfinder();
     void find_path(vec2 pstart, vec2 pend);
     float heuristic(float x, float y, vec2 end);
     static bool is_destination(float x, float y, vec2 destination);
     bool is_valid(float x, float y, vec2 start);
     void drawpath(std::vector<vec2> path);
-    
+
+    //bot_automove.cpp
+    void Automove();
+        
 
     //drawing
-
     void drawline(vec2 p0, vec2 p1, float r, float g, float b);
     void drawbox(vec2 p0, float r, float g, float b);
 };

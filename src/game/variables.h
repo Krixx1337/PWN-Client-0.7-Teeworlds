@@ -15,9 +15,9 @@ MACRO_CONFIG_INT(Flybot_Gores, pwn_flybot_gores, 0, 0, 1, CFGFLAG_CLIENT, "Flybo
 MACRO_CONFIG_INT(Balance, pwn_balance_bot, 0, 0, 1, CFGFLAG_CLIENT, "Balance on tees")
 
 MACRO_CONFIG_INT(Pathfinder, pwn_pathfinder, 0, 0, 1, CFGFLAG_CLIENT, "Find best possible path from your pos to mousepos")
-MACRO_CONFIG_INT(Draw_Path, pwn_draw_path_pathfinder, 1, 0, 1, CFGFLAG_CLIENT, "Draw the path found")
-MACRO_CONFIG_INT(X_MAX, pwn_x_max_pathfinder, 100, 0, 200, CFGFLAG_CLIENT, "X - Length ( in tiles ) of the rectangle the pathfinder is allowed to use ( higher value might lead to fps drops )")
-MACRO_CONFIG_INT(Y_MAX, pwn_y_max_pathfinder, 100, 0, 200, CFGFLAG_CLIENT, "Y - Height ( in tiles ) of the rectangle the pathfinder is allowed to use ( higher value might lead to fps drops )")
+MACRO_CONFIG_INT(Draw_Path, pwn_draw_path_pathfinder, 1, 0, 1, CFGFLAG_CLIENT|CFGFLAG_SAVE, "Draw the path found")
+MACRO_CONFIG_INT(X_MAX, pwn_x_max_pathfinder, 100, 0, 150, CFGFLAG_CLIENT|CFGFLAG_SAVE, "X - Length ( in tiles ) of the rectangle the pathfinder is allowed to use ( higher value might lead to fps drops )")
+MACRO_CONFIG_INT(Y_MAX, pwn_y_max_pathfinder, 100, 0, 150, CFGFLAG_CLIENT|CFGFLAG_SAVE, "Y - Height ( in tiles ) of the rectangle the pathfinder is allowed to use ( higher value might lead to fps drops )")
 
 MACRO_CONFIG_INT(RenderPrediction, pwn_render_prediction, 0, 0, 1, CFGFLAG_CLIENT, "Workaround for inputdelay")
 // client
